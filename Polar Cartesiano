@@ -1,0 +1,35 @@
+função que converte coordenadas polares para cartesianas. Em outras palavras, a função de recebe dois números inteiros e
+retorna uma struct do tipo ponto. O programa principal apenas lê e imprime, a conversão é realizada por uma função sabendo que x = r*cos(a) e y = r*sin(a). 
+Para a implementação do exerc
+
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <stdlib.h>
+
+typedef struct {
+    float x;
+    float y;
+    float r;
+    float a;
+} ponto;
+
+int siNcos(float r, float a){
+    float y, x;
+      y = r * cos(a);
+      x = r * sin(a);
+    printf("%.1f\n", y);
+    printf("%.1f", x);
+   
+    return 0;  
+}
+
+int main() {
+  ponto p;
+     scanf("%f", &p.r);
+     scanf("%f", &p.a);
+
+    siNcos(p.r, p.a);
+    return 0;
+}
+
