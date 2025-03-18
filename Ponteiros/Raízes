@@ -1,0 +1,37 @@
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <stdlib.h>
+
+
+void raizes(float A, float B, float C, float *X1, float *X2){
+
+    float D = sqrt((B*B) - 4*A*C);
+    *X1 = (-B+D)/(2*A);
+    *X2 = (-B-D)/(2*A);
+
+    if(*X1 == -0){ //Correcao para o resultado '-0' que resultava do Testcase1
+        printf("%.1f ", 0);
+    }
+    else{
+        printf("%.1f ", *X1);
+    }
+    if(*X2 == -0){
+        printf("%.1f", 0);
+    }
+    else{
+    printf("%.1f", *X2);
+    }
+}
+
+int main() {
+    float A, B, C, *X1, *X2;
+
+    scanf("%f", &A);
+    scanf("%f", &B);
+    scanf("%f", &C);
+
+    raizes(A, B, C, &X1, &X2);
+
+    return 0;
+}
