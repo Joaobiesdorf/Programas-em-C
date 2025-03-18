@@ -1,0 +1,66 @@
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <stdlib.h>
+
+typedef struct {
+    char nome[255];
+    int saquesTotal;
+    int bloqueiosTotal;
+    int ataquesTotal;
+    int saquesSucesso;
+    int bloqueiosSucesso;
+    int ataquesSucesso;
+}Jogador;
+
+void Percent(Jogador *J, int qnt){
+    int i =0;
+    int pts = 0, ptsS = 0;
+
+    for(i=0; i<qnt; i++){
+        pts += J[i].saquesSucesso;
+        ptsS += J[i].saquesTotal ;
+    }
+        printf("Pontos de Saque: %.2f%% \n", (((float)pts/ptsS)*100));
+   pts = 0;
+   ptsS = 0;
+
+
+       for(i=0; i<qnt; i++){
+        pts += J[i].bloqueiosSucesso;
+        ptsS += J[i].bloqueiosTotal ;
+    }
+        printf("Pontos de Bloqueio: %.2f%% \n", (((float)pts/ptsS)*100));
+   pts = 0;
+   ptsS = 0;
+
+
+       for(i=0; i<qnt; i++){
+        pts += J[i].ataquesSucesso;
+        ptsS += J[i].ataquesTotal ;
+    }
+        printf("Pontos de Ataque: %.2f%% \n", ((float)pts/ptsS)*100);
+}
+
+
+int main(){
+    int qnt, i;
+    Jogador *J;
+    scanf("%d", &qnt);
+    
+    J = (Jogador* )malloc(sizeof(Jogador)* qnt);
+
+        for(i=0; i<qnt; i++){
+        scanf("%s", J[i].nome);
+        scanf("%d", &J[i].saquesTotal);
+        scanf("%d", &J[i].bloqueiosTotal);
+        scanf("%d", &J[i].ataquesTotal);
+        scanf("%d", &J[i].saquesSucesso);
+        scanf("%d", &J[i].bloqueiosSucesso);
+        scanf("%d", &J[i].ataquesSucesso);
+    }
+
+       Percent(J, qnt);
+    free(J);
+    return 0;
+}
