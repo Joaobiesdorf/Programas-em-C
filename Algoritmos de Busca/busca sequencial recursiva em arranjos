@@ -1,0 +1,35 @@
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <stdlib.h>
+
+int busca_seq_rec(int chave, int *v, int i, int n){
+    if(i < n)
+        return(v[i] == chave) ? i : busca_seq_rec(chave, v, i+1, n);
+    else
+        return -1;
+}
+
+int main() {
+   int i, n, n_casos, teste;
+    int *v; 
+    
+    scanf("%d", &n);
+    
+    v= (int*) malloc(sizeof(int) * n);
+    
+    for(i=0; i<n; i++)
+        scanf("%d", &v[i]);
+    
+    scanf("%d", &n_casos);
+    
+    while(n_casos > 0){
+        scanf("%d", &teste);
+        
+        printf("%d\n", busca_seq_rec(teste, v, 0, n));
+        
+        n_casos--;
+    }
+    free(v);
+    return 0;
+}
