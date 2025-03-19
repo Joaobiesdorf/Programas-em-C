@@ -1,0 +1,41 @@
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <stdlib.h>
+
+
+void selectsort2(int v[], int i, int n){
+     int x, y, aux;
+         if (i < n - 1){
+          y = i;
+              for (x = i + 1; x < n; x++)
+                      if (v[x] < v[y])
+                              y = x;
+                                if (y != i){
+                              aux = v[i];
+                              v[i] = v[y];
+                              v[y] = aux;
+                               }
+          selectsort2(v, i + 1, n);
+          }
+}
+
+
+  int main() {
+         int i, z, *v;
+         scanf("%d", &z);
+         v = (int*) malloc(sizeof(int) * z);
+         for (i = 0; i < z; i++){
+            scanf("%d", &v[i]);
+         }
+      
+            selectsort2(v, 0, z);
+      
+           for (i = 0; i < z; i++){
+                    printf("%d ", v[i]);
+           }
+       free(v);
+      
+return 0;
+}
+
