@@ -1,0 +1,61 @@
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <stdlib.h>
+
+
+int sequencia(int key, int v[], int n, int m){
+         int t,ini = 0,meio, fim = n-1;
+         while((fim-ini+1)>m){
+              if ((ini == fim) && (key == v[ini])){
+                   return ini;
+              }
+        else if (ini < fim){
+                    meio = (ini + fim) / 2;
+              if (key == v[meio]){
+                    return meio;
+              }
+              else if (key < v[meio]){
+                    fim = meio - 1;
+              }
+              else{
+                   ini = meio + 1;
+              }
+          }
+      else return -1;
+}
+       for(int i=ini; i<=fim;i++){
+              printf("%d ",v[i]);
+       }
+       for(t=0; t<n && key!=v[t]; t++);
+          printf("\n");
+    if(key>v[n-1]){
+         return -1;
+    }
+    else if (t<key){
+         return t;
+        }
+    else{
+return -1;
+    }
+return -1;
+}
+
+
+int main(){
+    
+     int c, j, k, i;
+     
+     scanf("%d", &c);
+     scanf("%d", &j);
+    int v[j];
+     
+      for(i=0;i<j;i++){
+          scanf("%d",&v[i]);
+       }
+        scanf("%d",&k);
+    
+        printf("%d",sequencia(c,v,j,k));
+    
+return 0;
+}
