@@ -1,0 +1,52 @@
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <stdlib.h>
+void quicksort(float *x, int esq, int dir){
+    int i = esq, j = dir;
+    float pivo=x[(i+j)/2],aux;
+    do{
+        while (x[i] < pivo)
+            i++;
+
+        while (x[j] > pivo)
+            j--;
+
+        if (i <= j){
+            aux = x[i];
+            x[i] = x[j];
+            x[j] = aux;
+            i++;
+            j--;
+        }
+    }while (i <= j);
+
+    if (j > esq)
+        quicksort(x, esq, j);
+    if (i < dir)
+        quicksort(x, i, dir);
+}
+
+void imprimir_lista(float *l,int n){
+    int i;
+
+        for (i = 0; i < n; i++)
+            printf("%.1f ", l[i]);
+
+        printf("\n");
+
+}
+int main() {
+    int x,i;
+    float *v;
+    scanf("%d",&x);
+     v=(int)malloc(sizeof(float)*x);
+    for(i=0;i<x;i++) {
+       scanf("%f",&v[i]);
+       
+    }
+    quicksort(v,0,x-1);
+    imprimir_lista(v,x);
+    
+    return 0;
+}
