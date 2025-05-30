@@ -1,0 +1,24 @@
+#include <stdio.h>
+
+float dobrar_valor(float *X, float *X1, float *X2) {
+    *X *= 2; 
+    *X1 *= 2; 
+    *X2 *= 2; 
+    return (*X + *X1 + *X2); 
+}
+
+int main() {
+    int n, i;
+    float A, B, C, Soma;
+    scanf("%d", &n);
+    for (i = 0; i < n; i++) {
+        scanf("%f", &A);
+        scanf("%f", &B);
+        scanf("%f", &C);
+        Soma = dobrar_valor(&A, &B, &C); 
+        printf("A=%.1f B=%.1f C=%.1f SOMA=%.1f\n", A, B, C, Soma);
+    }
+    return 0;
+}
+
+
