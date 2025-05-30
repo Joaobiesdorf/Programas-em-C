@@ -1,0 +1,42 @@
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <stdlib.h>
+
+
+float mat(float Alt, float Larg, float Comp, float *X , float *X1, float *X2){
+
+    float area, vol, comp;
+    
+    area = (2*Alt*Larg + 2*Alt*Comp + 2*Larg*Comp);
+    vol = (Alt*Larg*Comp);
+    comp = (sqrt((Alt*Alt)+(Larg*Larg)+(Comp*Comp)));
+    
+    *X = area;
+    *X1 = vol;
+    *X2 = comp;
+    
+        
+    printf("area: %.1f\n", *X);
+    printf("volume: %.1f\n", *X1);
+    printf("comprimento da diagonal: %.1f\n", *X2);
+return 0;
+
+
+}
+
+
+int main() {
+    float Alt, Larg, Comp, *X, *X1, *X2;
+
+    scanf("%f", &Alt);
+    scanf("%f", &Larg);
+    scanf("%f", &Comp);
+
+    mat(Alt, Larg, Comp, &X, &X1, &X2);
+
+
+    return 0;
+}
+
+
