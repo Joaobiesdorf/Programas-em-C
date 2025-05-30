@@ -1,0 +1,79 @@
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <stdlib.h>
+
+typedef struct {
+    char nome[30];
+    int ener;
+    int def;
+    int forc;
+} lutador;
+
+
+int main() {
+   
+  lutador L1, L2;
+  int turno, dif=0, i;
+ // printf("LUTADOR 1: \n");
+     scanf("%s", L1.nome);
+     scanf("%d", &L1.ener);
+     scanf("%d", &L1.def);
+     scanf("%d", &L1.forc);
+
+  //printf("LUTADOR 2: \n");
+     scanf("%s", L2.nome);
+     scanf("%d", &L2.ener);
+     scanf("%d", &L2.def);
+     scanf("%d", &L2.forc);
+
+    // printf("\nNUMERO DE TURNOS\n");
+     scanf("%d", &turno);
+
+    // printf("LUTA");
+
+     for(i=0;i<turno;i++){
+
+     dif = 0;
+     dif= L1.forc - L2.def;
+     if(dif <= 0){
+        dif = 1;
+     }
+      L2.ener = L2.ener - dif;
+         
+     if(L2.ener <= 0){
+        L2.ener = 0;
+         break;
+     }
+         
+     dif= L2.forc - L1.def;
+     if(dif <= 0){
+        dif = 1;
+     }
+      L1.ener = L1.ener - dif;
+         
+     if(L1.ener <=0){
+        L1.ener = 0;
+         break;
+     }
+
+         
+     }
+
+     printf("%s", L1.nome);
+     printf(" %d\n", L1.ener);
+     printf("%s", L2.nome);
+     printf(" %d\n", L2.ener);
+    
+     if(L1.ener > L2.ener){
+        printf("%s", L1.nome);
+     }
+     else if(L2.ener > L1.ener){
+        printf("%s", L2.nome);
+     }
+     else{
+        printf("empate");
+     }
+
+    return 0;
+}
