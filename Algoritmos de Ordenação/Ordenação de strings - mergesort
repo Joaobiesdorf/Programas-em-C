@@ -1,0 +1,89 @@
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <stdlib.h>
+
+int char_comp(char c1, char c2){
+    if (c1 == c2){
+        return 0;
+    }
+    else if (c1 < c2){
+        return -1;
+    }else 
+        return 1;
+}
+
+int Comparar(char v1[], char v2[]){
+    int i;
+
+    for (i = 0; ( (v2[i] != '\0') && (v1[i] != '\0') && v1[i] == v2[i]) ; i++);
+
+    return char_comp(v1[i], v2[i]);
+}
+
+void merge(char **vec, int esq, int meio, int dir){
+    int i, j, k, num1 = meio - esq + 1,  num2 = dir - meio;
+       
+    char ** L = (char**) malloc(sizeof(char*) * num1);
+    char ** R = (char**) malloc(sizeof(char*) * num2);
+
+    for (i = 0; i < num1; i++){
+        L[i] = vec[esq + i];
+    }
+    
+    for (j = 0; j < num2; j++){
+        R[j] = vec[meio + j + 1];
+    }
+    
+    i = 0;
+    j = 0;
+
+    for (k = esq; k <= dir; k++){
+         if ((i < num1) && ((j >= num2) || Comparar(L[i], R[j]) <= 0)){
+            vec[k] = L[i];
+            i++;
+        }
+        
+        else if ((j < num2) || (i >= num1)){
+            vec[k] = R[j];
+            j++;
+        }
+    }
+}
+
+void mergesort(char ** v, int esq, int dir){
+    int meio;
+
+    if (esq < dir){
+        meio = (esq + dir) / 2;
+        mergesort(v, esq, meio);
+        mergesort(v, meio + 1, dir);
+        merge(v, esq, meio, dir);
+    }
+}
+
+int main() {
+    int i, n;
+    scanf("%d", &n);
+    char **vec;
+    vec = (char**) malloc(sizeof(char*) * n);
+    i=0;
+
+    while(i < n){
+        vec[i] = (char*) malloc(sizeof(char) * 50);
+        scanf("%s", vec[i]);
+        i++;
+    }
+    
+    mergesort(vec, 0, n-1);
+    i=0;
+    
+    while(i < n){
+        printf("%s\n", vec[i]);
+        free(vec[i]);
+        i++;
+    }
+    free(vec);
+
+    return 0;
+}
