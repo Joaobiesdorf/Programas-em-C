@@ -1,0 +1,62 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int** Smatrizes(int **matrizA, int **matrizB, int l, int c){
+    int i, j;
+    int **matrizC = (int**)malloc(l * sizeof(int*));
+    for(i = 0; i < l; i++){
+        matrizC[i] = (int*)malloc(c * sizeof(int));
+        for(j = 0; j < c; j++){
+            matrizC[i][j] = matrizA[i][j] + matrizB[i][j];
+        }
+    }
+    return matrizC;
+}
+
+int main(){
+    int i, j;
+    int l, c;
+
+    scanf("%d %d", &l, &c);
+
+    int **matrizA = (int**)malloc(l * sizeof(int*));
+    int **matrizB = (int**)malloc(l * sizeof(int*));
+    int **matrizC = (int**)malloc(l * sizeof(int*));
+
+    for(i = 0; i < l; i++){
+        matrizA[i] = (int*)malloc(c * sizeof(int));
+        matrizB[i] = (int*)malloc(c * sizeof(int));
+        matrizC[i] = (int*)malloc(c * sizeof(int));
+
+        for(j = 0; j < c; j++){
+            scanf("%d", &matrizA[i][j]);
+        }
+    }
+
+    for(i = 0; i < l; i++){
+        for(j = 0; j < c; j++){
+            scanf("%d", &matrizB[i][j]);
+        }
+    }
+
+    matrizC = Smatrizes(matrizA, matrizB, l, c);
+
+    for(i = 0; i < l; i++){
+        for(j = 0; j < c; j++){
+            printf("%d ", matrizC[i][j]);
+        }
+        printf("\n");
+    }
+
+    for(i = 0; i < l; i++){
+        free(matrizA[i]);
+        free(matrizB[i]);
+        free(matrizC[i]);
+    }
+
+    free(matrizA);
+    free(matrizB);
+    free(matrizC);
+
+    return 0;
+}
