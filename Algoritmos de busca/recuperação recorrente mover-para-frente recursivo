@@ -1,0 +1,47 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+void MoverPfrente(int v[], int tam, int key, int c) {
+    int aux, i;
+    if (c == tam) {
+        return;
+    }
+    
+    
+    if (v[c] == key) {
+         aux = v[c];
+           for (i = c; i > 0; i--) {
+               v[i] = v[i - 1];
+      }
+        
+        v[0] = aux;
+    }
+       MoverPfrente(v, tam, key, c + 1);
+}
+
+int main() {
+    int tam, i, valorKey, key;
+    scanf("%d", &tam);
+    int* v = (int*)malloc(tam * sizeof(int));
+    
+    for (i = 0; i < tam; i++) {
+        scanf("%d", &v[i]);
+    }
+    
+    scanf("%d", &valorKey);
+    
+    for (i = 0; i < valorKey; i++) {
+        
+        scanf("%d", &key);
+    
+        MoverPfrente(v, tam, key, 0);
+    }
+    
+    for (i = 0; i < tam; i++) {
+        printf("%d ", v[i]);
+    }
+    printf("\n");
+    
+    free(v);
+    
+}
