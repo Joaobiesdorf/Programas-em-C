@@ -1,0 +1,36 @@
+#include <stdio.h>
+
+void bubbleSort(float vec[], int tam) {
+int i, j;
+    float var;
+    for (i = 0; i < tam - 1; i++) {
+        for (j = 0; j < tam - i - 1; j++) {
+            if (vec[j] > vec[j + 1]) {
+    var = vec[j];
+     vec[j] = vec[j + 1];
+    vec[j + 1] = var;
+            }
+        }
+    }
+}
+
+int main() {
+    float vec[100];
+    int tam = 0;
+    float n;
+    
+    do {
+        scanf("%f", &n);
+        
+        if (n != -1) {
+            vec[tam] = n;
+            tam++;
+        }
+        
+    } while (n != -1);
+     bubbleSort(vec, tam);
+    
+    for (int i = 0; i < tam; i++) {
+        printf("%.1f ", vec[i]);
+    }
+}
