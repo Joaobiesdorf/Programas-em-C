@@ -1,0 +1,81 @@
+#include <stdio.h>
+#include <string.h>
+
+
+typedef struct {
+    char nome[100];
+    int energia, defesa, forca, golpes[3];
+} Personagem;
+
+
+void restaurar(Personagem *p) {
+    p->energia += 200;
+    if (p->energia > 1000) {
+        p->energia = 1000;
+    }
+}
+
+int main() {
+    Personagem p1, p2;
+    int n_acoes, dano=0;
+int personagem, acao, golpe;
+    scanf("%s %d %d %d %d %d %d", p1.nome, &p1.energia, &p1.defesa, &p1.forca, &p1.golpes[1], &p1.golpes[2], &p1.golpes[3]);
+    scanf("%s %d %d %d %d %d %d", p2.nome, &p2.energia, &p2.defesa, &p2.forca, &p2.golpes[1], &p2.golpes[2], &p2.golpes[3]);
+    scanf("%d", &n_acoes);
+
+     
+    for (int i = 0; i < n_acoes; i++) {
+        golpe = 0;
+        personagem = 0;
+        dano =0;
+        
+        
+        scanf("%d %lc", &personagem, &acao);
+        if(personagem == 1){
+        if (acao == 'A') {
+            scanf("%d", &golpe);
+            
+            dano = p1.forca + p1.golpes[golpe] - p2.defesa;
+                     
+            if (dano < 0) {
+                dano = 1;
+            }
+            p2.energia = p2.energia - dano;
+                
+        } 
+        else if (acao == 'C'){ 
+                restaurar(&p1);
+        }
+        }
+        else if (personagem == 2){
+        if (acao == 'A') {
+            scanf("%d", &golpe);
+            
+            dano = p2.forca + p2.golpes[golpe] - p1.defesa;
+
+            
+            if (dano < 0) {
+                dano = 1;
+            }
+            p1.energia = p1.energia - dano;
+            
+        } 
+        else if (acao == 'C'){ 
+                restaurar(&p2);
+        }
+        }
+        
+    }
+
+    printf("%s %d\n", p1.nome, p1.energia);
+    printf("%s %d\n", p2.nome, p2.energia);
+    if (p1.energia == p2.energia) {
+        printf("empate\n");
+    } else if (p1.energia > p2.energia) {
+        printf("%s\n", p1.nome);
+    } else {
+        printf("%s\n", p2.nome);
+    }
+
+    return 0;
+}
