@@ -1,0 +1,235 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <limits.h>
+typedef struct FilaE FilaE;
+typedef struct Cell Cell;
+ struct Cell{
+    int item; 
+    Cell *next;
+};
+
+struct FilaE{
+    Cell *inicio;
+    Cell *fim;
+};
+
+typedef struct{
+    Cell *topo;
+}PilhaE;
+
+Cell* criar_celula(int key){
+    Cell *c = (Cell*) malloc(sizeof(Cell));
+    c->item = key;
+
+    c->next = NULL;
+
+    return c;
+}
+
+PilhaE* criar_pilhaE(){
+    PilhaE* p = (PilhaE*) malloc(sizeof(PilhaE));
+
+    p->topo = NULL;
+
+    return p;
+}
+int pilhaE_vazia(PilhaE *p){
+    return (p == NULL) || (p->topo == NULL);
+}
+
+void empilhar(int key, PilhaE *p){
+    Cell *aux; 
+
+    if (p == NULL)
+        p = criar_pilhaE();
+
+    aux = criar_celula(key);
+
+    aux->next = p->topo;
+
+    p->topo = aux;
+}
+
+int desempilhar(PilhaE *p){
+    Cell *aux; 
+    int item = INT_MIN; 
+
+    if (!pilhaE_vazia(p)){
+        
+        aux = p->topo;
+        
+        item = aux->item;
+
+        p->topo = aux->next;
+
+        free(aux);
+    }
+
+    return item;
+}
+
+int acessar_valor_topo(PilhaE *p){
+    if (!pilhaE_vazia(p))
+        return p->topo->item;
+    else
+        return INT_MIN;
+}
+
+void imprimir_pilha(PilhaE *p){
+    Cell *aux;
+
+    if (!pilhaE_vazia(p)){
+        aux = p->topo;
+
+        while (aux != NULL){
+            printf("%d ", aux->item);
+
+            aux = aux->next;
+        }
+        
+        printf("\n");
+    }
+}
+
+int liberar_pilha(PilhaE *p){
+    if (p != NULL){
+        while (!pilhaE_vazia(p))
+            desempilhar(p);
+
+        free(p);
+
+        return 1;
+    }
+
+    return 0;
+}
+
+FilaE* criar_filaE(){
+    FilaE *f = (FilaE*) malloc(sizeof(FilaE));
+    
+    f->inicio = NULL;
+    f->fim = NULL;
+    
+    return f;
+}
+
+int filaE_vazia(FilaE* f){
+    return (f == NULL) || (f->inicio == NULL);
+}
+
+void enfileirar(int key, FilaE* f){
+    Cell *aux; 
+    if (f == NULL)
+        f = criar_filaE();
+
+    aux = criar_celula(key);
+
+ 
+    if (f->inicio == NULL)
+        f->inicio = f->fim = aux;
+    else{
+   
+        f->fim->next = aux;
+        f->fim = f->fim->next;
+    }
+
+}
+
+int desenfileirar(FilaE* f){
+    Cell *aux;
+    int item = INT_MIN; 
+    if (!filaE_vazia(f)){    
+       aux = f->inicio;
+        f->inicio = aux->next;
+        
+        if (f->inicio == NULL)
+            f->fim = NULL;
+   
+        item = aux->item;
+        free(aux);
+    }
+
+    return item;
+}
+
+int verificar_inicio(FilaE *f){
+    if (!filaE_vazia(f))
+        return f->inicio->item;
+    else
+        return INT_MIN;
+}
+
+int verificar_fim(FilaE *f){
+    if (!filaE_vazia(f))
+        return f->fim->item;
+    else
+        return INT_MIN;
+}
+
+void imprimir_fila(FilaE* f){
+    Cell *aux;
+
+    if (!filaE_vazia(f)){
+        aux = f->inicio;
+
+        while (aux != NULL){
+            printf("%d ", aux->item);
+            aux = aux->next;
+        }
+        
+        printf("\n");
+    }
+}
+
+int liberar_filaE(FilaE* f){
+    if (!filaE_vazia(f)){
+        while (!filaE_vazia(f))
+            desenfileirar(f);
+        free(f);
+        return 1;
+    }
+
+    return 0;
+}
+FilaE *ConcateInv(FilaE *f1, FilaE *f2){
+    PilhaE *p1 = criar_pilhaE();
+    FilaE *f3 = criar_filaE();
+    do{
+    empilhar(desenfileirar(f1), p1);
+    }while(!filaE_vazia(f1));
+    do{
+    enfileirar(desempilhar(p1),f3);
+    }while(!pilhaE_vazia(p1));
+    do{
+    empilhar(desenfileirar(f2), p1);
+    }while(!filaE_vazia(f2));
+    do{
+    enfileirar(desempilhar(p1),f3);
+    }while(!pilhaE_vazia(p1));
+    return f3;
+}
+int main() {
+    int i, j=0, x=0;
+   FilaE *f1 = criar_filaE();
+    FilaE *f2 = criar_filaE();
+    
+    do{ 
+        scanf("%d", &i);
+        if(i!=-1){
+           enfileirar(i, f1);
+            x++;
+        }     
+    }while(i!=-1);
+    i=0;
+        do{ 
+        scanf("%d", &i);
+        if(i!=-1){
+           enfileirar(i, f2);
+            j++;
+        }     
+    }while(i!=-1);
+    imprimir_fila(ConcateInv(f1,f2));
+
+    
+    return 0;
+}
