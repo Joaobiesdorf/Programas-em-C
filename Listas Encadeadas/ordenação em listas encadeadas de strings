@@ -1,0 +1,219 @@
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <stdlib.h>
+
+typedef struct Cell Cell;
+
+struct Cell{
+    char item[255];
+    Cell *next;
+};
+
+typedef struct ListaE ListaE;
+
+struct ListaE{
+    Cell *head;
+};
+
+int comparar_char(char c1, char c2){
+    if (c1 == c2) return 0;
+    else if (c1 < c2) return -1;
+    else return 1;
+}
+
+int comparar(char s1[], char s2[]){
+    int i;
+
+    for (i = 0; (s1[i] == s2[i]) && (s1[i] != '\0') && (s2[i] != '\0'); i++);
+
+    return comparar_char(s1[i], s2[i]);
+}
+
+void troca(char **vstr, int p1, int p2){
+    char *str;
+
+    str = vstr[p1];
+    vstr[p1] = vstr[p2];
+    vstr[p2] = str;
+}
+
+void bubblesort(ListaE *l){
+    char s[255];
+    Cell* cell1 = l->head;
+    Cell* cell2 = cell1;
+    
+    while(cell2->next != NULL){
+        while(cell1->next != NULL){
+            if (comparar(cell1->item, cell1->next->item) > 0){
+                strcpy(s, cell1->item);
+                strcpy(cell1->item , cell1->next->item);
+                strcpy(cell1->next->item , s);
+            }
+            cell1 = cell1->next;
+        }
+        cell1 = l->head;
+        cell2 = cell2->next;
+    }
+}
+
+
+
+Cell* criar_celula(char key[]){
+    Cell *c = (Cell*) malloc(sizeof(Cell));
+    strcpy(c->item, key);
+    c->next = NULL;
+
+    return c;
+}
+
+
+ListaE* criar_listaE(){
+    ListaE* l = (ListaE*) malloc(sizeof(ListaE));
+
+    l->head = NULL;
+
+    return l;
+}
+
+int listaE_vazia(ListaE *l){
+    return (l == NULL) || (l->head == NULL);
+}
+
+void inserir_primeiro(char key[], ListaE *l){
+    Cell *aux;
+
+    if (l == NULL)
+        l = criar_listaE();
+
+    aux = criar_celula(key);
+
+    aux->next = l->head;
+
+    l->head = aux;
+}
+
+void inserir_ultimo(char key[], ListaE *l){
+    Cell *aux, *nova;
+
+    if (l == NULL)
+        l = criar_listaE();
+
+    if (listaE_vazia(l))
+        inserir_primeiro(key, l);
+    else{
+        aux = l->head;
+
+        while(aux->next != NULL)
+            aux = aux->next;
+
+        nova = criar_celula(key);
+
+        aux->next = nova;
+    }
+}
+
+int remover(char key[], ListaE *l){
+    Cell *auxA, *auxP = NULL;
+
+    if (!listaE_vazia(l)){
+        auxA = l->head;
+
+        if(auxA->item == key){
+
+            l->head = l->head->next;
+        }else{
+
+            auxP = auxA;
+
+            while((auxA != NULL) && (auxA->item != key)){
+                auxP = auxA;
+
+                auxA = auxA->next;
+            }
+        }
+
+        if (auxA != NULL){
+
+            if (auxP != NULL)
+                auxP->next = auxA->next;
+
+            free(auxA);
+
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+void imprimir(ListaE *l){
+    Cell *aux;
+
+    if (!listaE_vazia(l)){
+        aux = l->head;
+
+        while (aux != NULL){
+            printf("%s \n", aux->item);
+
+            aux = aux->next;
+        }
+    }
+}
+
+int liberar_LE(ListaE *l){
+    Cell *aux = NULL;
+
+    if (l != NULL){
+        while(l->head != NULL){
+            aux = l->head;
+
+            l->head = aux->next;
+
+            free(aux);
+        }
+
+        free(l);
+
+        return 1;
+    }
+
+    return 0;
+}
+
+int tamanho_LE(ListaE *l){
+    Cell *aux;
+    int tam = 0;
+
+     if (!listaE_vazia(l)){
+        aux = l->head;
+
+        while(aux != NULL){
+            aux = aux->next;
+            tam++;
+        }
+    }
+
+    return tam;
+}
+
+int main() {
+    int num;
+    char str[255];
+    
+    ListaE *n = criar_listaE();
+    
+    scanf("%d", &num);
+    
+    for(int i=0; i<num; i++){
+        scanf("%s", str);
+        inserir_primeiro(str, n);
+    }
+    
+    bubblesort(n);
+    imprimir(n);
+    
+    liberar_LE(n);
+    
+    return 0;
+}
