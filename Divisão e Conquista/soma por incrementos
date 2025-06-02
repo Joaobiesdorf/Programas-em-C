@@ -1,0 +1,28 @@
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <stdlib.h>
+#include <limits.h>
+
+int INCRec(int num1, int num2) {
+    if(num2 != 0){
+        return INCRec(num1 + 1, num2 - 1);
+    } else {
+        return num1;
+    }
+}
+
+int main() {
+    int valor, i, num1, num2;
+    scanf("%d", &valor);
+
+    for (i = 0; i < valor; i++)
+    {
+        scanf("%d", &num1);
+        scanf("%d", &num2);
+
+        printf("%d\n", INCRec(num1, num2));
+    }
+
+    return 0;
+}
