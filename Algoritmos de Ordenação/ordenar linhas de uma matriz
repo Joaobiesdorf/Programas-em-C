@@ -1,0 +1,40 @@
+#include <stdio.h>
+
+void ordenarMatriz(int mat[][20], int lin, int col) {
+    int i,j,x,temp;
+    for (i = 0; i < lin; i++) {
+           for (x = 0; x < col - 1; x++) {
+        for (j = 0; j < col - x - 1; j++) {
+            if (mat[i][j] < mat[i][j + 1]) {
+                temp = mat[i][j];
+                mat[i][j] = mat[i][j + 1];
+                mat[i][j + 1] = temp;
+            }
+        }
+    }
+    }
+}
+
+int main() {
+    int lin, col;
+    int i,j;
+    
+    scanf("%d %d", &lin, &col);
+    
+    int mat[20][20];
+    for (i = 0; i < lin; i++) {
+        for (j = 0; j < col; j++) {
+            scanf("%d", &mat[i][j]);
+        }
+    }
+    
+    ordenarMatriz(mat, lin, col);
+        for (i = 0; i < lin; i++) {
+        for (j = 0; j < col; j++) {
+            printf("%d ", mat[i][j]);
+        }
+        printf("\n");
+    }
+    
+    return 0;
+}
