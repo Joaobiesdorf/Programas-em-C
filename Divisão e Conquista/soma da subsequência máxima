@@ -1,0 +1,60 @@
+//soma subsequencia
+
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <stdlib.h>
+#include <limits.h>
+
+#define maximo(a, b) (a > b) ? a : b
+
+int subMaxSoma(int vec[], int s, int meio, int e)
+{
+    int i, startSoma, soma = 0;
+     startSoma = INT_MIN;
+    for ( i = meio; i >= s; i--)   {
+        soma += vec[i];
+        if (soma > startSoma) {
+            startSoma = soma;
+        }
+    }
+
+    soma = 0;
+    int endSoma = INT_MIN;
+
+    for (int i = meio + 1; i <= e; i++)
+    {
+        soma += vec[i];
+        if (soma > endSoma){
+            endSoma = soma;
+        }
+    }
+    return maximo(maximo(startSoma, endSoma), startSoma + endSoma);
+}
+
+int subsequencia(int v[], int s, int e)
+{
+    int meio, esqSoma, dirSoma, sm;
+    if (s == e)
+        return v[s];
+    meio = (s + e) / 2;
+
+     esqSoma = subsequencia(v, s, meio);
+    dirSoma = subsequencia(v, meio + 1, e);
+     sm = subMaxSoma(v, s, meio, e);
+    return maximo(maximo(esqSoma, dirSoma), sm);
+}
+
+int main()
+{
+    int num, r;
+    scanf("%d", &num);
+    int v[num];
+
+    for (int i = 0; i < num; i++) {
+        scanf("%d", &v[i]);
+    }
+    r = subsequencia(v, 0, num - 1);
+    printf("%d\n", r);
+    return 0;
+}
