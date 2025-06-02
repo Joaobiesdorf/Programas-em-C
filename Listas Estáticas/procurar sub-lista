@@ -1,0 +1,51 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX 100
+
+typedef struct {
+    int tam;
+    int vet[MAX];
+} Lista;
+
+int buscaLista(Lista *l1, Lista *l2) {
+    int i, j;
+    for (i = 0; i <= l1->tam - l2->tam; i++) {
+        for (j = 0; j < l2->tam; j++) {
+            if (l1->vet[i+j] != l2->vet[j]) {
+                break;
+  }
+ }
+        if (j == l2->tam) {
+            return i;
+      }
+    }
+    return -1;
+}
+
+int main() {
+    Lista l1, l2;
+    int i, num;
+   
+    
+    l1.tam = 0;
+     l2.tam = 0;
+    do {
+        scanf("%d", &num);
+        if (num != -1) {
+            l1.vet[l1.tam] = num;
+            l1.tam++;
+ }
+ } while (num != -1);
+    
+   
+do {
+        scanf("%d", &num);
+        if (num != -1) {
+            l2.vet[l2.tam] = num;
+            l2.tam++;
+       }
+    } while (num != -1);
+    int posicao = buscaLista(&l1, &l2);
+    printf("%d\n", posicao);
+    return 0;
+}
