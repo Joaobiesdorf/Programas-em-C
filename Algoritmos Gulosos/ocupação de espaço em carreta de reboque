@@ -1,0 +1,46 @@
+//carreta
+
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <stdlib.h>
+
+void carga(int l, int m, int n)
+{
+
+    int c1 = 0, c2 = 0;
+    if (l > 0)   {
+        if ((m > 0) && (m <= l)){
+            if (m < n){
+                c1++;
+                l = l - m;
+            }
+            else  {
+                c1 += l / m;
+                l = l % m;
+            }
+        }
+        if ((n > 0) && (n <= l)) {
+            c2 += l / n;
+            l = l % n;
+        }
+    }
+    else{
+        return 0;
+    }
+    printf("%d\n%d\n%d\n", c1, c2, l);
+
+}
+
+int main()
+{
+
+    int l, m, n;
+
+    scanf("%d", &l);
+    scanf("%d", &m);
+    scanf("%d", &n);
+    
+    carga(l, m, n);
+    return 0;
+}
