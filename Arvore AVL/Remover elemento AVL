@@ -1,0 +1,45 @@
+No* minimoValor(No* no) {
+    No* atual = no;
+    while (atual->esq) atual = atual->esq;
+    return atual;
+}
+
+No* remover(No* raiz, int valor) {
+    if (!raiz) return raiz;
+
+    if (valor < raiz->valor) raiz->esq = remover(raiz->esq, valor);
+    else if (valor > raiz->valor) raiz->dir = remover(raiz->dir, valor);
+    else {
+        if (!raiz->esq || !raiz->dir) {
+            No* temp = raiz->esq ? raiz->esq : raiz->dir;
+            free(raiz);
+            return temp;
+        }
+        No* temp = minimoValor(raiz->dir);
+        raiz->valor = temp->valor;
+        raiz->dir = remover(raiz->dir, temp->valor);
+    }
+
+    if (!raiz) return NULL;
+
+    raiz->altura = 1 + max(altura(raiz->esq), altura(raiz->dir));
+    int fb = fatorBalanceamento(raiz);
+
+    if (fb > 1 && fatorBalanceamento(raiz->esq) >= 0)
+        return rotacaoDireita(raiz);
+
+    if (fb > 1 && fatorBalanceamento(raiz->esq) < 0) {
+        raiz->esq = rotacaoEsquerda(raiz->esq);
+        return rotacaoDireita(raiz);
+    }
+
+    if (fb < -1 && fatorBalanceamento(raiz->dir) <= 0)
+        return rotacaoEsquerda(raiz);
+
+    if (fb < -1 && fatorBalanceamento(raiz->dir) > 0) {
+        raiz->dir = rotacaoDireita(raiz->dir);
+        return rotacaoEsquerda(raiz);
+    }
+
+    return raiz;
+}
