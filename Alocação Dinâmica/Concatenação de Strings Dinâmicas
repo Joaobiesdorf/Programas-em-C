@@ -1,0 +1,36 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main() {
+    char *str1, *str2, *resultado;
+    int tam1, tam2;
+
+    printf("Tamanho da primeira string: ");
+    scanf("%d", &tam1);
+    getchar();
+
+    str1 = (char *) malloc((tam1 + 1) * sizeof(char));
+    printf("Digite a primeira string: ");
+    fgets(str1, tam1 + 1, stdin);
+    getchar();
+
+    printf("Tamanho da segunda string: ");
+    scanf("%d", &tam2);
+    getchar();
+
+    str2 = (char *) malloc((tam2 + 1) * sizeof(char));
+    printf("Digite a segunda string: ");
+    fgets(str2, tam2 + 1, stdin);
+
+    resultado = (char *) malloc((tam1 + tam2 + 1) * sizeof(char));
+    strcpy(resultado, str1);
+    strcat(resultado, str2);
+
+    printf("String concatenada: %s\n", resultado);
+
+    free(str1);
+    free(str2);
+    free(resultado);
+    return 0;
+}
