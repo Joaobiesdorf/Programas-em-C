@@ -1,0 +1,44 @@
+#include <stdio.h>
+#include <limits.h>
+
+#define V 5
+
+int menorDistancia(int dist[], int visitado[]) {
+    int min = INT_MAX, index;
+    for (int i = 0; i < V; i++)
+        if (!visitado[i] && dist[i] <= min)
+            min = dist[i], index = i;
+    return index;
+}
+
+void dijkstra(int grafo[V][V], int origem) {
+    int dist[V], visitado[V];
+    for (int i = 0; i < V; i++) dist[i] = INT_MAX, visitado[i] = 0;
+    dist[origem] = 0;
+
+    for (int i = 0; i < V - 1; i++) {
+        int u = menorDistancia(dist, visitado);
+        visitado[u] = 1;
+
+        for (int v = 0; v < V; v++)
+            if (!visitado[v] && grafo[u][v] && dist[u] != INT_MAX &&
+                dist[u] + grafo[u][v] < dist[v])
+                dist[v] = dist[u] + grafo[u][v];
+    }
+
+    printf("Distâncias a partir do vértice %d:\n", origem);
+    for (int i = 0; i < V; i++)
+        printf("Para %d: %d\n", i, dist[i]);
+}
+
+int main() {
+    int grafo[V][V] = {
+        {0, 10, 0, 0, 5},
+        {0, 0, 1, 0, 2},
+        {0, 0, 0, 4, 0},
+        {7, 0, 6, 0, 0},
+        {0, 3, 9, 2, 0}
+    };
+    dijkstra(grafo, 0);
+    return 0;
+}
