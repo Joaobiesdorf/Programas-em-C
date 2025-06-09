@@ -1,0 +1,95 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct No {
+    int valor, altura;
+    struct No *esq, *dir;
+} No;
+
+int altura(No *n) { return n ? n->altura : 0; }
+int max(int a, int b) { return a > b ? a : b; }
+
+No* novoNo(int valor) {
+    No *no = malloc(sizeof(No));
+    no->valor = valor;
+    no->esq = no->dir = NULL;
+    no->altura = 1;
+    return no;
+}
+
+int fatorBalanceamento(No *n) {
+    return altura(n->esq) - altura(n->dir);
+}
+
+No* rotacaoDireita(No *y) {
+    No *x = y->esq;
+    No *T2 = x->dir;
+    x->dir = y;
+    y->esq = T2;
+    y->altura = max(altura(y->esq), altura(y->dir)) + 1;
+    x->altura = max(altura(x->esq), altura(x->dir)) + 1;
+    return x;
+}
+
+No* rotacaoEsquerda(No *x) {
+    No *y = x->dir;
+    No *T2 = y->esq;
+    y->esq = x;
+    x->dir = T2;
+    x->altura = max(altura(x->esq), altura(x->dir)) + 1;
+    y->altura = max(altura(y->esq), altura(y->dir)) + 1;
+    return y;
+}
+
+No* inserir(No* no, int valor) {
+    if (!no) return novoNo(valor);
+    if (valor < no->valor) no->esq = inserir(no->esq, valor);
+    else if (valor > no->valor) no->dir = inserir(no->dir, valor);
+    else return no;
+
+    no->altura = 1 + max(altura(no->esq), altura(no->dir));
+    int fb = fatorBalanceamento(no);
+
+    if (fb > 1 && valor < no->esq->valor) return rotacaoDireita(no);
+    if (fb < -1 && valor > no->dir->valor) return rotacaoEsquerda(no);
+    if (fb > 1 && valor > no->esq->valor) {
+        no->esq = rotacaoEsquerda(no->esq);
+        return rotacaoDireita(no);
+    }
+    if (fb < -1 && valor < no->dir->valor) {
+        no->dir = rotacaoDireita(no->dir);
+        return rotacaoEsquerda(no);
+    }
+
+    return no;
+}
+
+No* buscar(No* raiz, int valor) {
+    if (!raiz) return NULL;
+    if (valor == raiz->valor) return raiz;
+    if (valor < raiz->valor) return buscar(raiz->esq, valor);
+    return buscar(raiz->dir, valor);
+}
+
+int main() {
+    No *raiz = NULL;
+    int n, v, b;
+
+    printf("Quantos elementos deseja inserir? ");
+    scanf("%d", &n);
+
+    for (int i = 0; i < n; i++) {
+        printf("Digite o valor %d: ", i + 1);
+        scanf("%d", &v);
+        raiz = inserir(raiz, v);
+    }
+
+    printf("Digite o valor para buscar: ");
+    scanf("%d", &b);
+
+    No *resultado = buscar(raiz, b);
+    if (resultado) printf("Valor %d encontrado na árvore.\n", b);
+    else printf("Valor %d não encontrado.\n", b);
+
+    return 0;
+}
