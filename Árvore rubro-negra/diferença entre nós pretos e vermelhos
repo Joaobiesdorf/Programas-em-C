@@ -1,0 +1,256 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define min 0
+#define max 1
+
+typedef struct Node {
+    int key;
+    int color;
+    struct Node* pai;
+    struct Node* esq;
+    struct Node* dir;
+} Node;
+
+typedef struct {
+    Node* root;
+} RBT;
+
+RBT* Criar_RBT() {
+    RBT* tree = (RBT*)malloc(sizeof(RBT));
+
+    if (tree != NULL) 
+    {
+        tree->root = NULL;
+    }
+    return tree;
+}
+
+void RotaEsq(RBT* tree, Node* x) 
+{
+    Node* y = x->dir;
+    x->dir = y->esq;
+
+    if (y->esq != NULL) 
+    {
+        y->esq->pai = x;
+    }
+    y->pai = x->pai;
+
+    if (x->pai == NULL) 
+    {
+        tree->root = y;
+    } else if (x == x->pai->esq) 
+    {
+        x->pai->esq = y;
+    } else 
+    {
+        x->pai->dir = y;
+    }
+    y->esq = x;
+    x->pai = y;
+}
+
+void RotaDir(RBT* tree, Node* y) 
+{
+    Node* x = y->esq;
+    y->esq = x->dir;
+
+    if (x->dir != NULL) 
+    {
+        x->dir->pai = y;
+    }
+
+    x->pai = y->pai;
+
+    if (y->pai == NULL) 
+    {
+        tree->root = x;
+    } 
+    else if (y == y->pai->esq) 
+    {
+        y->pai->esq = x;
+    } 
+    else 
+    {
+        y->pai->dir = x;
+    }
+
+    x->dir = y;
+    y->pai = x;
+}
+
+void Inserir(RBT* tree, Node* z) 
+{
+    while (z != NULL && z->pai != NULL && z->pai->color == min) 
+    {
+        if (z->pai == z->pai->pai->esq) 
+        {
+            Node* y = z->pai->pai->dir;
+            if (y != NULL && y->color == min) 
+            {
+                z->pai->color = max;
+                y->color = max;
+                z->pai->pai->color = min;
+                z = z->pai->pai;
+            } else 
+            {
+                if (z == z->pai->dir) 
+                {
+                    z = z->pai;
+                    RotaEsq(tree, z);
+                }
+                z->pai->color = max;
+                z->pai->pai->color = min;
+                RotaDir(tree, z->pai->pai);
+            }
+        } 
+        else 
+        {
+            Node* y = z->pai->pai->esq;
+            if (y != NULL && y->color == min) 
+            {
+                z->pai->color = max;
+                y->color = max;
+                z->pai->pai->color = min;
+                z = z->pai->pai;
+            } 
+            else 
+            {
+                if (z == z->pai->esq) 
+                {
+                    z = z->pai;
+                    RotaDir(tree, z);
+                }
+                z->pai->color = max;
+                z->pai->pai->color = min;
+                RotaEsq(tree, z->pai->pai);
+            }
+        }
+    }
+    tree->root->color = max;
+}
+
+void insert(RBT* tree, int key) 
+{
+    Node* z = (Node*)malloc(sizeof(Node));
+    z->key = key;
+    z->esq = z->dir = z->pai = NULL;
+    z->color =min;
+
+    Node* y = NULL;
+    Node* x = tree->root;
+
+    while (x != NULL) 
+    {
+        y = x;
+        if (z->key < x->key) 
+        {
+            x = x->esq;
+        } 
+        else 
+        {
+            x = x->dir;
+        }
+    }
+
+    z->pai = y;
+    if (y == NULL) 
+    {
+        tree->root = z;
+    } else if (z->key < y->key) 
+    {
+        y->esq = z;
+    } else {
+        y->dir = z;
+    }
+
+    Inserir(tree, z);
+}
+
+Node* procurar(RBT* tree, int key) {
+    Node* current = tree->root;
+    while (current != NULL) {
+        if (key == current->key) {
+            return current;
+        } else if (key < current->key) {
+            current = current->esq;
+        } else {
+            current = current->dir;
+        }
+    }
+    return NULL;
+}
+
+void ordenar(Node* root) {
+    if (root != NULL) {
+        ordenar(root->esq);
+        printf("%d ", root->key);
+        ordenar(root->dir);
+    }
+}
+
+void remover(Node* root) {
+    if (root != NULL) {
+        remover(root->esq);
+        remover(root->dir);
+        free(root);
+    }
+}
+
+int Nopreto(Node* node) 
+{
+    int soma = 0;
+
+    if (node == NULL) {
+        return soma;
+    }
+
+    if (node->color == max) {
+        soma += node->key; 
+    }
+
+    soma += Nopreto(node->esq); 
+    soma += Nopreto(node->dir); 
+
+    return soma;
+}
+
+int Novermelho(Node* node) 
+{
+    int soma = 0;
+
+    if (node == NULL)  {
+        return soma;
+    }
+
+    if (node->color == min)  { 
+        soma += node->key; 
+    }
+
+    soma += Novermelho(node->esq); 
+    soma += Novermelho(node->dir); 
+
+    return soma;
+}
+
+int Ret(Node *node){
+    return abs(Nopreto(node) - Novermelho(node));
+}
+
+int main() 
+{
+    RBT* Arv = Criar_RBT(); 
+    int Num, val,i=0 , chave=0;
+
+    scanf("%d", &Num);
+
+    for (i = 0; i < Num; i++) {
+        scanf("%d", &chave);
+        insert(Arv, chave);
+    }
+    
+
+    val = Ret(Arv->root);
+    printf("%d\n",val);
+
+}
