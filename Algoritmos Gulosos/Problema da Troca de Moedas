@@ -1,0 +1,22 @@
+
+#include <stdio.h>
+
+void trocaMoedas(int valor, int moedas[], int n) {
+    printf("Usar moedas de: ");
+    for (int i = 0; i < n; i++) {
+        while (valor >= moedas[i]) {
+            valor -= moedas[i];
+            printf("%d ", moedas[i]);
+        }
+    }
+    printf("\n");
+}
+
+int main() {
+    int moedas[] = {50, 25, 10, 5, 1};
+    int valor;
+    printf("Digite o valor a ser trocado: ");
+    scanf("%d", &valor);
+    trocaMoedas(valor, moedas, 5);
+    return 0;
+}
