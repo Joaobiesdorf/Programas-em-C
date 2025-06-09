@@ -1,0 +1,19 @@
+int contarNosInternos(No *raiz) {
+    if (!raiz || (!raiz->esq && !raiz->dir)) return 0;
+    return 1 + contarNosInternos(raiz->esq) + contarNosInternos(raiz->dir);
+}
+
+int main() {
+    No *raiz = NULL;
+    int n, v;
+    printf("Quantos elementos? ");
+    scanf("%d", &n);
+    for (int i = 0; i < n; i++) {
+        printf("Valor %d: ", i + 1);
+        scanf("%d", &v);
+        raiz = inserir(raiz, v);
+    }
+
+    printf("Número de nós internos: %d\n", contarNosInternos(raiz));
+    return 0;
+}
