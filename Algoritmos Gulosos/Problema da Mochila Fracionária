@@ -1,0 +1,42 @@
+#include <stdio.h>
+
+typedef struct {
+    int peso;
+    int valor;
+} Item;
+
+void mochilaFracionaria(Item itens[], int n, int capacidade) {
+    float razao[n], total = 0;
+    for (int i = 0; i < n; i++)
+        razao[i] = (float)itens[i].valor / itens[i].peso;
+
+    for (int i = 0; i < n - 1; i++) // Ordena por razão valor/peso
+        for (int j = i + 1; j < n; j++)
+            if (razao[i] < razao[j]) {
+                float tmp = razao[i];
+                razao[i] = razao[j];
+                razao[j] = tmp;
+                Item it = itens[i];
+                itens[i] = itens[j];
+                itens[j] = it;
+            }
+
+    for (int i = 0; i < n && capacidade > 0; i++) {
+        if (itens[i].peso <= capacidade) {
+            capacidade -= itens[i].peso;
+            total += itens[i].valor;
+        } else {
+            total += itens[i].valor * ((float)capacidade / itens[i].peso);
+            capacidade = 0;
+        }
+    }
+
+    printf("Valor total na mochila: %.2f\n", total);
+}
+
+int main() {
+    Item itens[] = {{10, 60}, {20, 100}, {30, 120}};
+    int capacidade = 50;
+    mochilaFracionaria(itens, 3, capacidade);
+    return 0;
+}
