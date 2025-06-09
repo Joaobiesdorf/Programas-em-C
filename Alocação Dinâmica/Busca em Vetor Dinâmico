@@ -1,0 +1,36 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    int *vetor, n, busca, encontrado = 0;
+
+    printf("Quantos elementos no vetor? ");
+    scanf("%d", &n);
+
+    vetor = (int *) malloc(n * sizeof(int));
+    if (!vetor) {
+        printf("Erro na alocação.\n");
+        return 1;
+    }
+
+    printf("Digite os %d elementos:\n", n);
+    for (int i = 0; i < n; i++)
+        scanf("%d", &vetor[i]);
+
+    printf("Qual número deseja buscar? ");
+    scanf("%d", &busca);
+
+    for (int i = 0; i < n; i++) {
+        if (vetor[i] == busca) {
+            printf("Número encontrado na posição %d.\n", i);
+            encontrado = 1;
+            break;
+        }
+    }
+
+    if (!encontrado)
+        printf("Número não encontrado.\n");
+
+    free(vetor);
+    return 0;
+}
