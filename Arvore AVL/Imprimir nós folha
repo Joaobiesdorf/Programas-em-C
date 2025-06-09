@@ -1,0 +1,26 @@
+void imprimirFolhas(No *raiz) {
+    if (!raiz) return;
+    if (!raiz->esq && !raiz->dir) {
+        printf("%d ", raiz->valor);
+        return;
+    }
+    imprimirFolhas(raiz->esq);
+    imprimirFolhas(raiz->dir);
+}
+
+int main() {
+    No *raiz = NULL;
+    int n, v;
+    printf("Quantos elementos? ");
+    scanf("%d", &n);
+    for (int i = 0; i < n; i++) {
+        printf("Valor %d: ", i + 1);
+        scanf("%d", &v);
+        raiz = inserir(raiz, v);
+    }
+
+    printf("Nodos folha: ");
+    imprimirFolhas(raiz);
+    printf("\n");
+    return 0;
+}
