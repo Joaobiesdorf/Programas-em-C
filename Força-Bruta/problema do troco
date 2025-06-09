@@ -1,0 +1,41 @@
+  
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <stdlib.h>
+#include <limits.h>
+
+int num_troco(int v[], int qnt, int troco, int i, int mintroco){
+    int n1, n2;
+    if (i >= qnt) {
+        if (troco > 0) {
+            return INT_MAX;
+        }
+        else {
+            return mintroco;
+        }
+    }
+    else {
+        n1 = num_troco(v, qnt, troco, i + 1, mintroco);
+        n2 = num_troco(v, qnt, troco % v[i], i + 1, mintroco + troco / v[i]);
+        return n1 < n2 ? n1 : n2;
+    }
+}
+
+int val(int v[], int qnt, int troco){
+    return num_troco(v, qnt, troco, 0, 0);
+}
+
+int main(){
+    int num, troco;
+    int *vec;
+    scanf("%d %d", &troco, &num);   
+    vec = (int *)malloc(sizeof(int) * num);
+
+    for (int i = 0; i < num; i++){
+        scanf("%d", &vec[i]);
+    }
+    printf("%d", val(vec, num, troco));
+    free(vec);
+    return 0;
+}
