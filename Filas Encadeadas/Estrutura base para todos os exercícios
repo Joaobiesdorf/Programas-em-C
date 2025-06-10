@@ -1,0 +1,51 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct No {
+    int valor;
+    struct No *prox;
+} No;
+
+typedef struct {
+    No *inicio;
+    No *fim;
+} Fila;
+
+void inicializar(Fila *f) {
+    f->inicio = f->fim = NULL;
+}
+
+int estaVazia(Fila *f) {
+    return f->inicio == NULL;
+}
+
+void enfileirar(Fila *f, int v) {
+    No *novo = malloc(sizeof(No));
+    novo->valor = v;
+    novo->prox = NULL;
+    if (estaVazia(f)) {
+        f->inicio = f->fim = novo;
+    } else {
+        f->fim->prox = novo;
+        f->fim = novo;
+    }
+}
+
+int desenfileirar(Fila *f, int *v) {
+    if (estaVazia(f)) return 0;
+    No *temp = f->inicio;
+    *v = temp->valor;
+    f->inicio = f->inicio->prox;
+    if (f->inicio == NULL) f->fim = NULL;
+    free(temp);
+    return 1;
+}
+
+void imprimir(Fila f) {
+    No *atual = f.inicio;
+    while (atual) {
+        printf("%d ", atual->valor);
+        atual = atual->prox;
+    }
+    printf("\n");
+}
