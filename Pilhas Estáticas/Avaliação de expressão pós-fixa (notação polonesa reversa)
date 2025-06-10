@@ -1,0 +1,76 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX 100
+
+typedef struct {
+    int dados[MAX];
+    int topo;
+} Pilha;
+
+void inicializar(Pilha *p) {
+    p->topo = -1;
+}
+
+int estaVazia(Pilha *p) {
+    return p->topo == -1;
+}
+
+int estaCheia(Pilha *p) {
+    return p->topo == MAX - 1;
+}
+
+int push(Pilha *p, int v) {
+    if (estaCheia(p)) return 0;
+    p->dados[++p->topo] = v;
+    return 1;
+}
+
+int pop(Pilha *p, int *v) {
+    if (estaVazia(p)) return 0;
+    *v = p->dados[p->topo--];
+    return 1;
+}
+
+int topo(Pilha *p, int *v) {
+    if (estaVazia(p)) return 0;
+    *v = p->dados[p->topo];
+    return 1;
+}
+int main() {
+    Pilha p;
+    inicializar(&p);
+
+    char expr[MAX];
+    printf("Digite a expressão pós-fixa: ");
+    scanf("%s", expr);
+
+    int i = 0;
+    int op1, op2, res;
+
+    while (expr[i] != '\0') {
+        char c = expr[i];
+        if (c >= '0' && c <= '9') {
+            push(&p, c - '0');
+        } else {
+            pop(&p, &op2);
+            pop(&p, &op1);
+            switch (c) {
+                case '+': res = op1 + op2; break;
+                case '-': res = op1 - op2; break;
+                case '*': res = op1 * op2; break;
+                case '/': res = op1 / op2; break;
+                default:
+                    printf("Operador inválido: %c\n", c);
+                    return 1;
+            }
+            push(&p, res);
+        }
+        i++;
+    }
+
+    pop(&p, &res);
+    printf("Resultado: %d\n", res);
+
+    return 0;
+}
