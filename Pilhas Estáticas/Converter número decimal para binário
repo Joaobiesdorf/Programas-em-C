@@ -1,0 +1,62 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX 100
+
+typedef struct {
+    int dados[MAX];
+    int topo;
+} Pilha;
+
+void inicializar(Pilha *p) {
+    p->topo = -1;
+}
+
+int estaVazia(Pilha *p) {
+    return p->topo == -1;
+}
+
+int estaCheia(Pilha *p) {
+    return p->topo == MAX - 1;
+}
+
+int push(Pilha *p, int v) {
+    if (estaCheia(p)) return 0;
+    p->dados[++p->topo] = v;
+    return 1;
+}
+
+int pop(Pilha *p, int *v) {
+    if (estaVazia(p)) return 0;
+    *v = p->dados[p->topo--];
+    return 1;
+}
+
+int topo(Pilha *p, int *v) {
+    if (estaVazia(p)) return 0;
+    *v = p->dados[p->topo];
+    return 1;
+}
+int main() {
+    Pilha p;
+    inicializar(&p);
+
+    int num, resto;
+    printf("Digite um número decimal: ");
+    scanf("%d", &num);
+
+    int original = num;
+    while (num > 0) {
+        push(&p, num % 2);
+        num /= 2;
+    }
+
+    printf("Binário de %d: ", original);
+    while (!estaVazia(&p)) {
+        pop(&p, &resto);
+        printf("%d", resto);
+    }
+    printf("\n");
+
+    return 0;
+}
