@@ -1,0 +1,132 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef enum { RED, BLACK } Color;
+
+typedef struct RBNode {
+    int chave;
+    Color cor;
+    struct RBNode *esq, *dir, *pai;
+} RBNode;
+
+RBNode* raiz = NULL;
+
+// Funções auxiliares (rotação, balanceamento, inserção)
+RBNode* criarNo(int chave) {
+    RBNode* novo = malloc(sizeof(RBNode));
+    novo->chave = chave;
+    novo->cor = RED;
+    novo->esq = novo->dir = novo->pai = NULL;
+    return novo;
+}
+
+void rotacaoEsquerda(RBNode** raiz, RBNode* x) {
+    RBNode* y = x->dir;
+    x->dir = y->esq;
+    if (y->esq) y->esq->pai = x;
+    y->pai = x->pai;
+    if (!x->pai) *raiz = y;
+    else if (x == x->pai->esq) x->pai->esq = y;
+    else x->pai->dir = y;
+    y->esq = x;
+    x->pai = y;
+}
+
+void rotacaoDireita(RBNode** raiz, RBNode* y) {
+    RBNode* x = y->esq;
+    y->esq = x->dir;
+    if (x->dir) x->dir->pai = y;
+    x->pai = y->pai;
+    if (!y->pai) *raiz = x;
+    else if (y == y->pai->dir) y->pai->dir = x;
+    else y->pai->esq = x;
+    x->dir = y;
+    y->pai = x;
+}
+
+void corrigirInsercao(RBNode** raiz, RBNode* z) {
+    while (z->pai && z->pai->cor == RED) {
+        if (z->pai == z->pai->pai->esq) {
+            RBNode* tio = z->pai->pai->dir;
+            if (tio && tio->cor == RED) {
+                z->pai->cor = BLACK;
+                tio->cor = BLACK;
+                z->pai->pai->cor = RED;
+                z = z->pai->pai;
+            } else {
+                if (z == z->pai->dir) {
+                    z = z->pai;
+                    rotacaoEsquerda(raiz, z);
+                }
+                z->pai->cor = BLACK;
+                z->pai->pai->cor = RED;
+                rotacaoDireita(raiz, z->pai->pai);
+            }
+        } else {
+            RBNode* tio = z->pai->pai->esq;
+            if (tio && tio->cor == RED) {
+                z->pai->cor = BLACK;
+                tio->cor = BLACK;
+                z->pai->pai->cor = RED;
+                z = z->pai->pai;
+            } else {
+                if (z == z->pai->esq) {
+                    z = z->pai;
+                    rotacaoDireita(raiz, z);
+                }
+                z->pai->cor = BLACK;
+                z->pai->pai->cor = RED;
+                rotacaoEsquerda(raiz, z->pai->pai);
+            }
+        }
+    }
+    (*raiz)->cor = BLACK;
+}
+
+void inserir(RBNode** raiz, int chave) {
+    RBNode* z = criarNo(chave);
+    RBNode* y = NULL;
+    RBNode* x = *raiz;
+
+    while (x) {
+        y = x;
+        if (z->chave < x->chave) x = x->esq;
+        else x = x->dir;
+    }
+
+    z->pai = y;
+    if (!y) *raiz = z;
+    else if (z->chave < y->chave) y->esq = z;
+    else y->dir = z;
+
+    corrigirInsercao(raiz, z);
+}
+
+RBNode* buscar(RBNode* raiz, int chave) {
+    if (!raiz || raiz->chave == chave) return raiz;
+    if (chave < raiz->chave) return buscar(raiz->esq, chave);
+    else return buscar(raiz->dir, chave);
+}
+void emOrdem(RBNode* raiz) {
+    if (!raiz) return;
+    emOrdem(raiz->esq);
+    printf("%d ", raiz->chave);
+    emOrdem(raiz->dir);
+}
+
+int main() {
+    int n, valor;
+    printf("Quantos números deseja inserir? ");
+    scanf("%d", &n);
+
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &valor);
+        inserir(&raiz, valor);
+    }
+
+    printf("Valores em ordem crescente: ");
+    emOrdem(raiz);
+    printf("\n");
+
+    return 0;
+}
