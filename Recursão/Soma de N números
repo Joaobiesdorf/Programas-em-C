@@ -1,0 +1,24 @@
+#include <stdio.h>
+
+// Função recursiva para somar n números
+int somaRecursiva(int n) {
+    int num;
+    if (n == 0) {
+        return 0;
+    } else {
+        printf("Digite um número: ");
+        scanf("%d", &num);
+        return num + somaRecursiva(n - 1);
+    }
+}
+
+int main() {
+    int n;
+    printf("Quantos números você deseja somar? ");
+    scanf("%d", &n);
+
+    int resultado = somaRecursiva(n);
+    printf("A soma é: %d\n", resultado);
+
+    return 0;
+}
