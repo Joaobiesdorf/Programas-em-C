@@ -1,0 +1,89 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define TABLE_SIZE 100
+
+typedef struct Node {
+    char chave[50];
+    int valor;
+    struct Node* prox;
+} Node;
+
+Node* tabela[TABLE_SIZE];
+
+int hash(char* str) {
+    int h = 0;
+    while (*str)
+        h = (h * 37 + *str++) % TABLE_SIZE;
+    return h;
+}
+
+void inserir(char* chave, int valor) {
+    int h = hash(chave);
+    Node* atual = tabela[h];
+
+    while (atual) {
+        if (strcmp(atual->chave, chave) == 0) {
+            atual->valor = valor;
+            return;
+        }
+        atual = atual->prox;
+    }
+
+    Node* novo = malloc(sizeof(Node));
+    strcpy(novo->chave, chave);
+    novo->valor = valor;
+    novo->prox = tabela[h];
+    tabela[h] = novo;
+}
+
+int buscar(char* chave, int* valor) {
+    int h = hash(chave);
+    Node* atual = tabela[h];
+
+    while (atual) {
+        if (strcmp(atual->chave, chave) == 0) {
+            *valor = atual->valor;
+            return 1;
+        }
+        atual = atual->prox;
+    }
+    return 0;
+}
+
+int main() {
+    for (int i = 0; i < TABLE_SIZE; i++)
+        tabela[i] = NULL;
+
+    int opcao;
+    char chave[50];
+    int valor;
+
+    do {
+        printf("\n1. Inserir\n2. Buscar\n3. Sair\nEscolha: ");
+        scanf("%d", &opcao);
+        getchar(); // consumir '\n'
+
+        if (opcao == 1) {
+            printf("Chave: ");
+            fgets(chave, 50, stdin);
+            chave[strcspn(chave, "\n")] = 0;
+
+            printf("Valor: ");
+            scanf("%d", &valor);
+            inserir(chave, valor);
+        } else if (opcao == 2) {
+            printf("Chave: ");
+            fgets(chave, 50, stdin);
+            chave[strcspn(chave, "\n")] = 0;
+
+            if (buscar(chave, &valor))
+                printf("Valor encontrado: %d\n", valor);
+            else
+                printf("Chave não encontrada.\n");
+        }
+    } while (opcao != 3);
+
+    return 0;
+}
