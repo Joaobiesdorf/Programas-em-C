@@ -1,0 +1,71 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX 100
+
+typedef struct {
+    int dados[MAX];
+    int topo;
+} Pilha;
+
+void inicializar(Pilha *p) {
+    p->topo = -1;
+}
+
+int estaVazia(Pilha *p) {
+    return p->topo == -1;
+}
+
+int estaCheia(Pilha *p) {
+    return p->topo == MAX - 1;
+}
+
+int push(Pilha *p, int v) {
+    if (estaCheia(p)) return 0;
+    p->dados[++p->topo] = v;
+    return 1;
+}
+
+int pop(Pilha *p, int *v) {
+    if (estaVazia(p)) return 0;
+    *v = p->dados[p->topo--];
+    return 1;
+}
+
+int topo(Pilha *p, int *v) {
+    if (estaVazia(p)) return 0;
+    *v = p->dados[p->topo];
+    return 1;
+}
+int main() {
+    Pilha p;
+    inicializar(&p);
+
+    char expressao[MAX];
+    printf("Digite a expressão: ");
+    scanf("%s", expressao);
+
+    int i = 0;
+    char c;
+    while (expressao[i] != '\0') {
+        c = expressao[i];
+        if (c == '(') {
+            push(&p, c);
+        } else if (c == ')') {
+            if (estaVazia(&p)) {
+                printf("Expressão inválida: parênteses desbalanceados\n");
+                return 0;
+            }
+            int lixo;
+            pop(&p, &lixo);
+        }
+        i++;
+    }
+
+    if (estaVazia(&p))
+        printf("Expressão válida!\n");
+    else
+        printf("Expressão inválida: parênteses não fechados\n");
+
+    return 0;
+}
