@@ -1,0 +1,67 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define TABLE_SIZE 100
+
+typedef struct Node {
+    char palavra[50];
+    int frequencia;
+    struct Node* prox;
+} Node;
+
+Node* tabela[TABLE_SIZE];
+
+int hash(char* str) {
+    int h = 0;
+    while (*str)
+        h = (h * 31 + *str++) % TABLE_SIZE;
+    return h;
+}
+
+void inserir(char* palavra) {
+    int h = hash(palavra);
+    Node* atual = tabela[h];
+
+    while (atual != NULL) {
+        if (strcmp(atual->palavra, palavra) == 0) {
+            atual->frequencia++;
+            return;
+        }
+        atual = atual->prox;
+    }
+
+    Node* novo = malloc(sizeof(Node));
+    strcpy(novo->palavra, palavra);
+    novo->frequencia = 1;
+    novo->prox = tabela[h];
+    tabela[h] = novo;
+}
+
+void imprimirFrequencias() {
+    for (int i = 0; i < TABLE_SIZE; i++) {
+        Node* atual = tabela[i];
+        while (atual) {
+            printf("'%s': %d\n", atual->palavra, atual->frequencia);
+            atual = atual->prox;
+        }
+    }
+}
+
+int main() {
+    char frase[500];
+    printf("Digite uma frase: ");
+    fgets(frase, sizeof(frase), stdin);
+
+    for (int i = 0; i < TABLE_SIZE; i++)
+        tabela[i] = NULL;
+
+    char* token = strtok(frase, " ,.\n");
+    while (token != NULL) {
+        inserir(token);
+        token = strtok(NULL, " ,.\n");
+    }
+
+    imprimirFrequencias();
+    return 0;
+}
