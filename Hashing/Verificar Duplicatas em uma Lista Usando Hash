@@ -1,0 +1,61 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define TABLE_SIZE 100
+
+typedef struct Node {
+    int valor;
+    struct Node* prox;
+} Node;
+
+Node* tabela[TABLE_SIZE];
+
+// Função hash simples
+int hash(int x) {
+    return abs(x) % TABLE_SIZE;
+}
+
+// Insere valor na tabela hash
+int inserir(int x) {
+    int h = hash(x);
+    Node* atual = tabela[h];
+    while (atual != NULL) {
+        if (atual->valor == x)
+            return 1; // duplicata encontrada
+        atual = atual->prox;
+    }
+
+    Node* novo = malloc(sizeof(Node));
+    novo->valor = x;
+    novo->prox = tabela[h];
+    tabela[h] = novo;
+
+    return 0;
+}
+
+int main() {
+    int n;
+    printf("Quantos números? ");
+    scanf("%d", &n);
+
+    int duplicado = 0;
+    for (int i = 0; i < TABLE_SIZE; i++)
+        tabela[i] = NULL;
+
+    printf("Digite os números:\n");
+    for (int i = 0; i < n; i++) {
+        int num;
+        scanf("%d", &num);
+        if (inserir(num)) {
+            duplicado = 1;
+            break;
+        }
+    }
+
+    if (duplicado)
+        printf("Duplicata encontrada!\n");
+    else
+        printf("Todos os números são únicos.\n");
+
+    return 0;
+}
