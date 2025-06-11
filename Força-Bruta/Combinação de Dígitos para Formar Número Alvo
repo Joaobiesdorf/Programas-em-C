@@ -1,0 +1,36 @@
+#include <stdio.h>
+
+int main() {
+    int n, alvo;
+    printf("Quantos dígitos? ");
+    scanf("%d", &n);
+
+    int digitos[n];
+    printf("Digite os %d dígitos:\n", n);
+    for (int i = 0; i < n; i++)
+        scanf("%d", &digitos[i]);
+
+    printf("Número alvo (3 dígitos): ");
+    scanf("%d", &alvo);
+
+    int achou = 0;
+
+    for (int i = 0; i < n && !achou; i++) {
+        for (int j = 0; j < n && !achou; j++) {
+            for (int k = 0; k < n && !achou; k++) {
+                if (i != j && i != k && j != k) {
+                    int num = digitos[i]*100 + digitos[j]*10 + digitos[k];
+                    if (num == alvo) {
+                        printf("Combinação encontrada: %d %d %d\n", digitos[i], digitos[j], digitos[k]);
+                        achou = 1;
+                    }
+                }
+            }
+        }
+    }
+
+    if (!achou)
+        printf("Nenhuma combinação forma o número %d.\n", alvo);
+
+    return 0;
+}
