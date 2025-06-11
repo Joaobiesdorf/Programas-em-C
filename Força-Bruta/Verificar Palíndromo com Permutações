@@ -1,0 +1,48 @@
+#include <stdio.h>
+#include <string.h>
+
+void trocar(char *a, char *b) {
+    char tmp = *a;
+    *a = *b;
+    *b = tmp;
+}
+
+int ehPalindromo(char *str) {
+    int i = 0, j = strlen(str) - 1;
+    while (i < j) {
+        if (str[i] != str[j]) return 0;
+        i++; j--;
+    }
+    return 1;
+}
+
+int encontrou = 0;
+
+void permutar(char *str, int l, int r) {
+    if (l == r) {
+        if (ehPalindromo(str)) {
+            encontrou = 1;
+        }
+    } else {
+        for (int i = l; i <= r; i++) {
+            trocar(&str[l], &str[i]);
+            permutar(str, l + 1, r);
+            trocar(&str[l], &str[i]);
+        }
+    }
+}
+
+int main() {
+    char str[20];
+    printf("Digite uma string: ");
+    scanf("%s", str);
+
+    permutar(str, 0, strlen(str) - 1);
+
+    if (encontrou)
+        printf("Existe uma permutação palíndroma.\n");
+    else
+        printf("Nenhuma permutação forma um palíndromo.\n");
+
+    return 0;
+}
