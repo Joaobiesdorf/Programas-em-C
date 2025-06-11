@@ -1,0 +1,32 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    int n, d;
+    printf("Quantos números no vetor? ");
+    scanf("%d", &n);
+
+    int v[n];
+    printf("Digite os %d valores:\n", n);
+    for (int i = 0; i < n; i++)
+        scanf("%d", &v[i]);
+
+    printf("Digite a diferença alvo (D): ");
+    scanf("%d", &d);
+
+    int encontrou = 0;
+    for (int i = 0; i < n && !encontrou; i++) {
+        for (int j = i + 1; j < n; j++) {
+            if (abs(v[i] - v[j]) == d) {
+                printf("Par encontrado: %d e %d (diferença = %d)\n", v[i], v[j], d);
+                encontrou = 1;
+                break;
+            }
+        }
+    }
+
+    if (!encontrou)
+        printf("Nenhum par encontrado com diferença %d.\n", d);
+
+    return 0;
+}
