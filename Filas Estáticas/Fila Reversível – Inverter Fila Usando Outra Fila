@@ -1,0 +1,68 @@
+#define TAM 100
+
+typedef struct {
+    int dados[TAM];
+    int ini, fim;
+} Fila;
+
+void inicializarFila(Fila* f) {
+    f->ini = f->fim = 0;
+}
+
+int filaVazia(Fila* f) {
+    return f->ini == f->fim;
+}
+
+int filaCheia(Fila* f) {
+    return ((f->fim + 1) % TAM) == f->ini;
+}
+
+int enfileirar(Fila* f, int valor) {
+    if (filaCheia(f)) return 0;
+    f->dados[f->fim] = valor;
+    f->fim = (f->fim + 1) % TAM;
+    return 1;
+}
+
+int desenfileirar(Fila* f, int* valor) {
+    if (filaVazia(f)) return 0;
+    *valor = f->dados[f->ini];
+    f->ini = (f->ini + 1) % TAM;
+    return 1;
+}
+void inverterFila(Fila* original) {
+    Fila auxiliar;
+    inicializarFila(&auxiliar);
+
+    // Copia elementos para um vetor para inverter
+    int temp[TAM], count = 0;
+    int valor;
+    while (desenfileirar(original, &valor))
+        temp[count++] = valor;
+
+    for (int i = count - 1; i >= 0; i--)
+        enfileirar(original, temp[i]);
+}
+
+int main() {
+    Fila fila;
+    inicializarFila(&fila);
+
+    int n, valor;
+    printf("Quantos valores deseja inserir? ");
+    scanf("%d", &n);
+    printf("Digite os valores:\n");
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &valor);
+        enfileirar(&fila, valor);
+    }
+
+    inverterFila(&fila);
+
+    printf("Fila invertida:\n");
+    while (desenfileirar(&fila, &valor))
+        printf("%d ", valor);
+    printf("\n");
+
+    return 0;
+}
