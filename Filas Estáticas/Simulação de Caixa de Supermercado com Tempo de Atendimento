@@ -1,0 +1,58 @@
+#include <stdio.h>
+#define TAM 100
+
+typedef struct {
+    char nome[50];
+    int tempo;
+} Cliente;
+
+typedef struct {
+    Cliente dados[TAM];
+    int ini, fim;
+} Fila;
+
+void inicializarFila(Fila* f) { f->ini = f->fim = 0; }
+int cheia(Fila* f) { return (f->fim + 1) % TAM == f->ini; }
+int vazia(Fila* f) { return f->ini == f->fim; }
+
+int enfileirar(Fila* f, Cliente c) {
+    if (cheia(f)) return 0;
+    f->dados[f->fim] = c;
+    f->fim = (f->fim + 1) % TAM;
+    return 1;
+}
+
+int desenfileirar(Fila* f, Cliente* c) {
+    if (vazia(f)) return 0;
+    *c = f->dados[f->ini];
+    f->ini = (f->ini + 1) % TAM;
+    return 1;
+}
+
+int main() {
+    Fila fila;
+    inicializarFila(&fila);
+
+    int n, tempoTotal = 0;
+    Cliente c;
+
+    printf("Quantos clientes? ");
+    scanf("%d", &n);
+
+    for (int i = 0; i < n; i++) {
+        printf("Nome do cliente %d: ", i + 1);
+        scanf(" %[^\n]", c.nome);
+        printf("Tempo de atendimento (min): ");
+        scanf("%d", &c.tempo);
+        enfileirar(&fila, c);
+    }
+
+    printf("\nAtendimento:\n");
+    while (desenfileirar(&fila, &c)) {
+        printf("%s esperou %d min e será atendido por %d min.\n", c.nome, tempoTotal, c.tempo);
+        tempoTotal += c.tempo;
+    }
+
+    printf("\nTempo total de funcionamento do caixa: %d minutos.\n", tempoTotal);
+    return 0;
+}
