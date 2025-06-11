@@ -1,0 +1,60 @@
+#define TAM 100
+
+typedef struct {
+    int dados[TAM];
+    int ini, fim;
+} Fila;
+
+void inicializarFila(Fila* f) {
+    f->ini = f->fim = 0;
+}
+
+int filaVazia(Fila* f) {
+    return f->ini == f->fim;
+}
+
+int filaCheia(Fila* f) {
+    return ((f->fim + 1) % TAM) == f->ini;
+}
+
+int enfileirar(Fila* f, int valor) {
+    if (filaCheia(f)) return 0;
+    f->dados[f->fim] = valor;
+    f->fim = (f->fim + 1) % TAM;
+    return 1;
+}
+
+int desenfileirar(Fila* f, int* valor) {
+    if (filaVazia(f)) return 0;
+    *valor = f->dados[f->ini];
+    f->ini = (f->ini + 1) % TAM;
+    return 1;
+}
+int main() {
+    Fila fila;
+    inicializarFila(&fila);
+
+    int n, id;
+    printf("Número de pacotes recebidos: ");
+    scanf("%d", &n);
+
+    printf("Digite os IDs dos pacotes recebidos:\n");
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &id);
+        enfileirar(&fila, id);
+    }
+
+    int esperado = 1, ok = 1;
+    while (!filaVazia(&fila)) {
+        desenfileirar(&fila, &id);
+        if (id != esperado) {
+            printf("Erro: pacote esperado era %d, mas chegou %d\n", esperado, id);
+            ok = 0;
+        }
+        esperado++;
+    }
+
+    if (ok) printf("Todos os pacotes chegaram em ordem!\n");
+
+    return 0;
+}
