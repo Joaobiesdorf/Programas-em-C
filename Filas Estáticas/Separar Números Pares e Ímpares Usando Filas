@@ -1,0 +1,60 @@
+#include <stdio.h>
+#define TAM 100
+
+typedef struct {
+    int dados[TAM];
+    int ini, fim;
+} Fila;
+
+void inicializarFila(Fila* f) { f->ini = f->fim = 0; }
+int cheia(Fila* f) { return (f->fim + 1) % TAM == f->ini; }
+int vazia(Fila* f) { return f->ini == f->fim; }
+
+int enfileirar(Fila* f, int v) {
+    if (cheia(f)) return 0;
+    f->dados[f->fim] = v;
+    f->fim = (f->fim + 1) % TAM;
+    return 1;
+}
+
+int desenfileirar(Fila* f, int* v) {
+    if (vazia(f)) return 0;
+    *v = f->dados[f->ini];
+    f->ini = (f->ini + 1) % TAM;
+    return 1;
+}
+
+void imprimirFila(Fila* f) {
+    int i = f->ini;
+    while (i != f->fim) {
+        printf("%d ", f->dados[i]);
+        i = (i + 1) % TAM;
+    }
+    printf("\n");
+}
+
+int main() {
+    Fila pares, impares;
+    inicializarFila(&pares);
+    inicializarFila(&impares);
+
+    int n, num;
+    printf("Quantos números deseja inserir? ");
+    scanf("%d", &n);
+    printf("Digite os números:\n");
+
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &num);
+        if (num % 2 == 0)
+            enfileirar(&pares, num);
+        else
+            enfileirar(&impares, num);
+    }
+
+    printf("Fila de pares: ");
+    imprimirFila(&pares);
+    printf("Fila de ímpares: ");
+    imprimirFila(&impares);
+
+    return 0;
+}
