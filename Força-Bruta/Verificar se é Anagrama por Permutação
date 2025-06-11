@@ -1,0 +1,46 @@
+#include <stdio.h>
+#include <string.h>
+
+void trocar(char* a, char* b) {
+    char temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+int anagrama = 0;
+
+void permutar(char* str, int l, int r, char* alvo) {
+    if (l == r) {
+        if (strcmp(str, alvo) == 0) {
+            anagrama = 1;
+        }
+    } else {
+        for (int i = l; i <= r; i++) {
+            trocar(&str[l], &str[i]);
+            permutar(str, l + 1, r, alvo);
+            trocar(&str[l], &str[i]);  // desfaz permutação
+        }
+    }
+}
+
+int main() {
+    char str1[20], str2[20];
+    printf("Digite a primeira string: ");
+    scanf("%s", str1);
+    printf("Digite a segunda string: ");
+    scanf("%s", str2);
+
+    if (strlen(str1) != strlen(str2)) {
+        printf("Não são anagramas (tamanhos diferentes).\n");
+        return 0;
+    }
+
+    permutar(str1, 0, strlen(str1) - 1, str2);
+
+    if (anagrama)
+        printf("São anagramas!\n");
+    else
+        printf("Não são anagramas.\n");
+
+    return 0;
+}
