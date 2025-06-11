@@ -1,0 +1,63 @@
+#include <stdio.h>
+#define TAM 100
+#define QUANTUM 3
+
+typedef struct {
+    int id;
+    int tempo_restante;
+} Processo;
+
+typedef struct {
+    Processo dados[TAM];
+    int ini, fim;
+} Fila;
+
+void inicializarFila(Fila* f) { f->ini = f->fim = 0; }
+int cheia(Fila* f) { return (f->fim + 1) % TAM == f->ini; }
+int vazia(Fila* f) { return f->ini == f->fim; }
+
+int enfileirar(Fila* f, Processo p) {
+    if (cheia(f)) return 0;
+    f->dados[f->fim] = p;
+    f->fim = (f->fim + 1) % TAM;
+    return 1;
+}
+
+int desenfileirar(Fila* f, Processo* p) {
+    if (vazia(f)) return 0;
+    *p = f->dados[f->ini];
+    f->ini = (f->ini + 1) % TAM;
+    return 1;
+}
+
+int main() {
+    Fila fila;
+    inicializarFila(&fila);
+
+    int n;
+    printf("Quantos processos? ");
+    scanf("%d", &n);
+
+    for (int i = 0; i < n; i++) {
+        Processo p;
+        p.id = i + 1;
+        printf("Tempo de execução do processo %d: ", p.id);
+        scanf("%d", &p.tempo_restante);
+        enfileirar(&fila, p);
+    }
+
+    printf("\nExecutando Round-Robin (quantum = %d)...\n", QUANTUM);
+    Processo p;
+    while (!vazia(&fila)) {
+        desenfileirar(&fila, &p);
+        if (p.tempo_restante > QUANTUM) {
+            printf("Processo %d executou por %d unidades.\n", p.id, QUANTUM);
+            p.tempo_restante -= QUANTUM;
+            enfileirar(&fila, p);
+        } else {
+            printf("Processo %d finalizado (executou %d).\n", p.id, p.tempo_restante);
+        }
+    }
+
+    return 0;
+}
