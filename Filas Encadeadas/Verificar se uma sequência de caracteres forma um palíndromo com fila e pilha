@@ -1,0 +1,59 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct No {
+    char letra;
+    struct No* prox;
+} No;
+
+void enfileirar(No** fim, No** inicio, char c) {
+    No* novo = (No*)malloc(sizeof(No));
+    novo->letra = c;
+    novo->prox = NULL;
+    if (*fim)
+        (*fim)->prox = novo;
+    else
+        *inicio = novo;
+    *fim = novo;
+}
+
+void empilhar(No** topo, char c) {
+    No* novo = (No*)malloc(sizeof(No));
+    novo->letra = c;
+    novo->prox = *topo;
+    *topo = novo;
+}
+
+int ehPalindromo(char palavra[]) {
+    No* filaInicio = NULL, *filaFim = NULL, *pilha = NULL;
+    int len = strlen(palavra);
+    for (int i = 0; i < len; i++) {
+        if (palavra[i] != ' ') {
+            enfileirar(&filaFim, &filaInicio, palavra[i]);
+            empilhar(&pilha, palavra[i]);
+        }
+    }
+
+    while (filaInicio && pilha) {
+        if (filaInicio->letra != pilha->letra)
+            return 0;
+        filaInicio = filaInicio->prox;
+        pilha = pilha->prox;
+    }
+
+    return 1;
+}
+
+int main() {
+    char palavra[100];
+    printf("Digite a palavra: ");
+    scanf(" %[^\n]", palavra);
+
+    if (ehPalindromo(palavra))
+        printf("É palíndromo.\n");
+    else
+        printf("Não é palíndromo.\n");
+
+    return 0;
+}
