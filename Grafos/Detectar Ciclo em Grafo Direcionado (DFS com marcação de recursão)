@@ -1,0 +1,58 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX 100
+
+typedef struct No {
+    int v;
+    struct No* prox;
+} No;
+
+No* adj[MAX];
+int visitado[MAX], em_recursao[MAX];
+int n;
+
+void adicionarAresta(int u, int v) {
+    No* novo = malloc(sizeof(No));
+    novo->v = v;
+    novo->prox = adj[u];
+    adj[u] = novo;
+}
+
+int temCiclo(int u) {
+    visitado[u] = 1;
+    em_recursao[u] = 1;
+
+    for (No* p = adj[u]; p != NULL; p = p->prox) {
+        if (!visitado[p->v] && temCiclo(p->v))
+            return 1;
+        else if (em_recursao[p->v])
+            return 1;
+    }
+
+    em_recursao[u] = 0;
+    return 0;
+}
+
+int main() {
+    int m, u, v;
+    printf("Número de vértices: ");
+    scanf("%d", &n);
+    printf("Número de arestas: ");
+    scanf("%d", &m);
+
+    for (int i = 0; i < m; i++) {
+        scanf("%d %d", &u, &v);
+        adicionarAresta(u, v);
+    }
+
+    for (int i = 0; i < n; i++) {
+        if (!visitado[i] && temCiclo(i)) {
+            printf("O grafo possui ciclo.\n");
+            return 0;
+        }
+    }
+
+    printf("O grafo NÃO possui ciclo.\n");
+    return 0;
+}
