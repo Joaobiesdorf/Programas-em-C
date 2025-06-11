@@ -1,0 +1,83 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct Cliente {
+    char nome[50];
+    int idade;
+    struct Cliente* prox;
+} Cliente;
+
+typedef struct {
+    Cliente* frente;
+    Cliente* tras;
+} Fila;
+
+void inicializarFila(Fila* f) {
+    f->frente = f->tras = NULL;
+}
+
+void enfileirar(Fila* f, char nome[], int idade) {
+    Cliente* novo = (Cliente*)malloc(sizeof(Cliente));
+    strcpy(novo->nome, nome);
+    novo->idade = idade;
+    novo->prox = NULL;
+
+    if (idade >= 60) {  // Enfileirar com prioridade
+        if (f->frente == NULL || f->frente->idade < 60) {
+            novo->prox = f->frente;
+            f->frente = novo;
+            if (f->tras == NULL) f->tras = novo;
+        } else {
+            Cliente* temp = f->frente;
+            while (temp->prox != NULL && temp->prox->idade >= 60)
+                temp = temp->prox;
+            novo->prox = temp->prox;
+            temp->prox = novo;
+            if (novo->prox == NULL) f->tras = novo;
+        }
+    } else {  // Fim da fila
+        if (f->tras == NULL) {
+            f->frente = f->tras = novo;
+        } else {
+            f->tras->prox = novo;
+            f->tras = novo;
+        }
+    }
+}
+
+void atender(Fila* f) {
+    if (f->frente == NULL) {
+        printf("Fila vazia!\n");
+        return;
+    }
+    Cliente* temp = f->frente;
+    printf("Atendendo: %s (idade: %d)\n", temp->nome, temp->idade);
+    f->frente = temp->prox;
+    if (f->frente == NULL) f->tras = NULL;
+    free(temp);
+}
+
+int main() {
+    Fila fila;
+    inicializarFila(&fila);
+    int opcao;
+
+    do {
+        printf("\n1. Enfileirar\n2. Atender\n3. Sair\nEscolha: ");
+        scanf("%d", &opcao);
+        if (opcao == 1) {
+            char nome[50];
+            int idade;
+            printf("Nome: ");
+            scanf(" %[^\n]", nome);
+            printf("Idade: ");
+            scanf("%d", &idade);
+            enfileirar(&fila, nome, idade);
+        } else if (opcao == 2) {
+            atender(&fila);
+        }
+    } while (opcao != 3);
+
+    return 0;
+}
