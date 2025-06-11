@@ -1,0 +1,42 @@
+#include <stdio.h>
+#include <math.h>
+
+int main() {
+    int n, alvo;
+    printf("Quantos elementos? ");
+    scanf("%d", &n);
+    
+    int vetor[n];
+    printf("Digite os %d elementos:\n", n);
+    for (int i = 0; i < n; i++)
+        scanf("%d", &vetor[i]);
+
+    printf("Digite a soma alvo: ");
+    scanf("%d", &alvo);
+
+    int total = pow(2, n);
+    int achou = 0;
+
+    for (int i = 1; i < total; i++) {
+        int soma = 0;
+        printf("Testando subconjunto: ");
+        for (int j = 0; j < n; j++) {
+            if (i & (1 << j)) {
+                printf("%d ", vetor[j]);
+                soma += vetor[j];
+            }
+        }
+        printf("=> Soma = %d\n", soma);
+        if (soma == alvo) {
+            achou = 1;
+            break;
+        }
+    }
+
+    if (achou)
+        printf("Existe um subconjunto cuja soma é %d.\n", alvo);
+    else
+        printf("Nenhum subconjunto encontrado com soma igual a %d.\n", alvo);
+
+    return 0;
+}
