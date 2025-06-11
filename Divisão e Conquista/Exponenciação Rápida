@@ -1,0 +1,23 @@
+#include <stdio.h>
+
+long long power(long long a, long long b, long long m) {
+    if (b == 0)
+        return 1;
+    long long temp = power(a, b / 2, m);
+    temp = (temp * temp) % m;
+    if (b % 2 == 0)
+        return temp;
+    else
+        return (a * temp) % m;
+}
+
+int main() {
+    long long a, b, m;
+    printf("Digite a base (a), o expoente (b) e o módulo (m): ");
+    scanf("%lld %lld %lld", &a, &b, &m);
+
+    long long result = power(a, b, m);
+    printf("%lld^%lld mod %lld = %lld\n", a, b, m, result);
+
+    return 0;
+}
