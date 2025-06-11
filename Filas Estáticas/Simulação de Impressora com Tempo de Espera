@@ -1,0 +1,56 @@
+#define TAM 100
+
+typedef struct {
+    int dados[TAM];
+    int ini, fim;
+} Fila;
+
+void inicializarFila(Fila* f) {
+    f->ini = f->fim = 0;
+}
+
+int filaVazia(Fila* f) {
+    return f->ini == f->fim;
+}
+
+int filaCheia(Fila* f) {
+    return ((f->fim + 1) % TAM) == f->ini;
+}
+
+int enfileirar(Fila* f, int valor) {
+    if (filaCheia(f)) return 0;
+    f->dados[f->fim] = valor;
+    f->fim = (f->fim + 1) % TAM;
+    return 1;
+}
+
+int desenfileirar(Fila* f, int* valor) {
+    if (filaVazia(f)) return 0;
+    *valor = f->dados[f->ini];
+    f->ini = (f->ini + 1) % TAM;
+    return 1;
+}
+int main() {
+    Fila fila;
+    inicializarFila(&fila);
+
+    int n, tempo, total = 0;
+    printf("Quantos trabalhos deseja adicionar? ");
+    scanf("%d", &n);
+
+    printf("Digite o tempo (em segundos) de cada trabalho:\n");
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &tempo);
+        enfileirar(&fila, tempo);
+    }
+
+    printf("\nSimulando impressão...\n");
+    int atual, acumulado = 0;
+    while (desenfileirar(&fila, &atual)) {
+        printf("Tempo de espera: %d s | Executando trabalho (%ds)\n", acumulado, atual);
+        acumulado += atual;
+    }
+
+    printf("Tempo total de execução: %d segundos.\n", acumulado);
+    return 0;
+}
