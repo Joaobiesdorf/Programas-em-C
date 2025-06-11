@@ -1,0 +1,79 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct Tarefa {
+    char descricao[100];
+    struct Tarefa* prox;
+} Tarefa;
+
+typedef struct {
+    Tarefa* fim;
+} FilaCircular;
+
+void inicializar(FilaCircular* f) {
+    f->fim = NULL;
+}
+
+void adicionarTarefa(FilaCircular* f, char desc[]) {
+    Tarefa* nova = (Tarefa*)malloc(sizeof(Tarefa));
+    strcpy(nova->descricao, desc);
+    if (f->fim == NULL) {
+        nova->prox = nova;
+    } else {
+        nova->prox = f->fim->prox;
+        f->fim->prox = nova;
+    }
+    f->fim = nova;
+}
+
+void executarTarefa(FilaCircular* f) {
+    if (f->fim == NULL) {
+        printf("Sem tarefas!\n");
+        return;
+    }
+    Tarefa* inicio = f->fim->prox;
+    printf("Executando: %s\n", inicio->descricao);
+    if (inicio == f->fim) {
+        free(inicio);
+        f->fim = NULL;
+    } else {
+        f->fim->prox = inicio->prox;
+        free(inicio);
+    }
+}
+
+void mostrarTarefas(FilaCircular* f) {
+    if (f->fim == NULL) {
+        printf("Fila vazia.\n");
+        return;
+    }
+    Tarefa* atual = f->fim->prox;
+    do {
+        printf("- %s\n", atual->descricao);
+        atual = atual->prox;
+    } while (atual != f->fim->prox);
+}
+
+int main() {
+    FilaCircular fila;
+    inicializar(&fila);
+    int opcao;
+    char desc[100];
+
+    do {
+        printf("\n1. Adicionar tarefa\n2. Executar tarefa\n3. Mostrar tarefas\n4. Sair\nEscolha: ");
+        scanf("%d", &opcao);
+        if (opcao == 1) {
+            printf("Descrição: ");
+            scanf(" %[^\n]", desc);
+            adicionarTarefa(&fila, desc);
+        } else if (opcao == 2) {
+            executarTarefa(&fila);
+        } else if (opcao == 3) {
+            mostrarTarefas(&fila);
+        }
+    } while (opcao != 4);
+
+    return 0;
+}
