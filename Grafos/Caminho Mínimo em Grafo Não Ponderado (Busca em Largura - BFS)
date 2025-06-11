@@ -1,0 +1,50 @@
+#include <stdio.h>
+#define MAX 100
+
+int grafo[MAX][MAX], visitado[MAX], distancia[MAX];
+int fila[MAX], ini = 0, fim = 0;
+int n;
+
+void bfs(int origem) {
+    visitado[origem] = 1;
+    distancia[origem] = 0;
+    fila[fim++] = origem;
+
+    while (ini < fim) {
+        int atual = fila[ini++];
+        for (int i = 0; i < n; i++) {
+            if (grafo[atual][i] && !visitado[i]) {
+                visitado[i] = 1;
+                distancia[i] = distancia[atual] + 1;
+                fila[fim++] = i;
+            }
+        }
+    }
+}
+
+int main() {
+    int m, u, v, origem, destino;
+    printf("Número de vértices: ");
+    scanf("%d", &n);
+    printf("Número de arestas: ");
+    scanf("%d", &m);
+
+    for (int i = 0; i < m; i++) {
+        scanf("%d %d", &u, &v);
+        grafo[u][v] = grafo[v][u] = 1;
+    }
+
+    printf("Origem: ");
+    scanf("%d", &origem);
+    printf("Destino: ");
+    scanf("%d", &destino);
+
+    bfs(origem);
+
+    if (visitado[destino])
+        printf("Distância mínima entre %d e %d: %d arestas\n", origem, destino, distancia[destino]);
+    else
+        printf("Não existe caminho entre %d e %d\n", origem, destino);
+
+    return 0;
+}
