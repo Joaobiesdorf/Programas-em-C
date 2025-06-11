@@ -1,0 +1,39 @@
+#include <stdio.h>
+
+#define MAX 100
+
+int grafo[MAX][MAX], visitado[MAX];
+int n;
+
+void dfs(int v) {
+    visitado[v] = 1;
+    for (int i = 0; i < n; i++)
+        if (grafo[v][i] && !visitado[i])
+            dfs(i);
+}
+
+int main() {
+    int m, u, v;
+    printf("Número de vértices: ");
+    scanf("%d", &n);
+    printf("Número de arestas: ");
+    scanf("%d", &m);
+
+    for (int i = 0; i < m; i++) {
+        printf("Aresta %d (u v): ", i + 1);
+        scanf("%d %d", &u, &v);
+        grafo[u][v] = grafo[v][u] = 1;
+    }
+
+    dfs(0);
+
+    for (int i = 0; i < n; i++) {
+        if (!visitado[i]) {
+            printf("O grafo NÃO é conexo.\n");
+            return 0;
+        }
+    }
+
+    printf("O grafo é conexo.\n");
+    return 0;
+}
